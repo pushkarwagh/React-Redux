@@ -7,13 +7,14 @@ import reportWebVitals from "./reportWebVitals";
 import 'bootstrap/dist/css/bootstrap.css' ;
 import { Provider } from "react-redux";
 import store from "./store";
+import UserRouter from "./pages/router";
 
 store.subscribe(() => console.log(store.getState()));
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      < UserRouter />
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

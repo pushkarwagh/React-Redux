@@ -1,47 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from 'react-router-dom';
-import shortid from "shortid";
+import { Link, useParams, useNavigate } from 'react-router-dom';
 
-import { AddUser } from "./actions/actions";
+import { EditUser } from "../actions/actions";
 
-export default function Form() {
+export default function Edit() {
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  let editUser = useSelector(state => state.UserReducer);
-  
-  const [name, setName ] = useState('')
-  const [email,setEmail] = useState('')
-  const [number, setNumber ] = useState('')
+  const editUser = useSelector(state => state.UserReducer.users);
+  console.log("ss",editUser)
+
+  const [name, setName ] = useState(editUser.name)
+  const [email,setEmail] = useState(editUser.email)
+  const [phone, setPhone ] = useState(editUser.phone)
   
   const HandleValue = (e) =>{
     e.preventDefault();
     const newUser = {
-      id: shortid.generate(),
       name:name,
       email:email,
-      number:number
+      phone:phone
     }
-      dispatch(AddUser(newUser))
-
-    
-    HandleReset();
+      dispatch(EditUser(newUser))
     navigate("/");
     
   }
 
-  const HandleReset = (e) => {
-    setEmail('');
-    setName('');
-    setNumber('');
-  }
-
-  return (
+   return (
     <div className="conatiner bg-secondary">
     <div className="my-5 w-50 m-auto ">
       <div className="text-center text-warning"> 
-             <h3> ADD-USER </h3>
+             <h3> Edit-User -{id}</h3> 
       </div>
 
       <form>
@@ -78,19 +69,17 @@ export default function Form() {
             Number
           </label>
           <input
-            type="number"
+            type="text"
             className="form-control"
             id="exampleInputNumber1"
-            value={number}
-            onChange={(e)=> setNumber(e.target.value)}
+            value={phone}
+            onChange={(e)=> setPhone(e.target.value)}
           />
         </div> 
 
         <button className='btn btn-success m-2' onClick={HandleValue}>
-         ADD  
+           Done
         </button>
-
-        <button className='btn btn-info m-2' onClick={HandleReset}>Reset</button>
         
         <Link to='/'>
         <button className='btn btn-danger m-2'>Cancel</button>
