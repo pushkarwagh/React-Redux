@@ -1,20 +1,22 @@
-import React, { useEffect } from "react";
+//import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { Link } from "react-router-dom";
+import { GrView } from "react-icons/gr";
 
-const ViewUser = (props) => {
+
+const ViewUser = () => {
   const { id } = useParams();
+  // const data = useLocation(); // get state through link..
 
-  const userData = useSelector(state => state.UserReducer.users)
-  console.log("aysy",userData)
-  return (
-    
-     
+  const userData = useSelector(state => state.UserReducer.adduser)
+  console.log("aysy",userData);
+
+  return (    
     
     <div className="my-5 w-80 m-auto ">
-      <div className="conatiner">
-        <h3> view user</h3>
+      <div className="conatiner bg-dark text-light">
+        <h3 className="text-center bg-secondary"> <GrView /> View-User </h3>
         <div className="border border-warning m-2 p-2 ">
           <label>id:</label> {id} <br />
           <label>Name:</label> {userData.name} <br />
@@ -22,7 +24,14 @@ const ViewUser = (props) => {
           <label>Phone-Num:</label> {userData.phone} <br />
         </div>
 
-        <Link to='/'>
+        {/* <button 
+          className='btn btn-warning m-2'
+          onClick={ () => console.log("full-info",userData)}
+        >
+          Full-info
+        </button> */}
+
+        <Link to="/">
         <button className='btn btn-danger m-2'> Back </button>
         </Link>
       

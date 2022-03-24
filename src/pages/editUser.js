@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { GrEdit } from "react-icons/gr";
 
 import { EditUser } from "../actions/actions";
 
@@ -9,30 +10,102 @@ export default function Edit() {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const editUser = useSelector(state => state.UserReducer.users);
+  const editUser = useSelector(state => state.UserReducer.adduser);
   console.log("ss",editUser)
 
   const [name, setName ] = useState(editUser.name)
   const [email,setEmail] = useState(editUser.email)
   const [phone, setPhone ] = useState(editUser.phone)
+  const [errors, setErrors] = useState({});
+
+  const handleValidation = () => {
+    let formIsValid = true;
+
+    //Name
+    if (!name) {
+      formIsValid = false;
+      errors["name"] = "Cannot be empty";
+    }
+
+    if (typeof name !== "undefined") {
+      if ( !name.match(/^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/) ) {
+        formIsValid = false;
+        errors["name"] = "Only letters";
+      }
+    }
+
+    //Email
+    if (!email) {
+      formIsValid = false;
+      errors["email"] = "Cannot be empty";
+    }
+
+    if (typeof email !== "undefined") {
+      let lastAtPos = email.lastIndexOf("@");
+      let lastDotPos = email.lastIndexOf(".");
+
+      if (
+        !(
+          lastAtPos < lastDotPos &&
+          lastAtPos > 0 &&
+          email.indexOf("@@") == -1 &&
+          lastDotPos > 2 &&
+          email.length - lastDotPos > 2
+        )
+      ) {
+        formIsValid = false;
+        errors["email"] = "Email is not valid";
+      }
+    }
+
+    //number
+    if (!phone) {
+      formIsValid = false;
+      errors["phone"] = "Cannot be empty";
+    }
+    if (typeof phone !== "undefined") {
+      var pattern = new RegExp(/^[0-9\b]+$/);
+      if (!pattern.test(phone)) {
+        formIsValid = false;
+        errors["phone"] = "Please enter only number.";
+      } 
+      else if (phone.length != 10) {
+        formIsValid = false;
+        errors["phone"] = "Please enter valid phone number.";
+      }
+    }
+
+    setErrors(errors);
+    return formIsValid;
+  };
+
   
   const HandleValue = (e) =>{
     e.preventDefault();
+
+   if (handleValidation()) {
     const newUser = {
+      id:id,
       name:name,
       email:email,
       phone:phone
     }
-      dispatch(EditUser(newUser))
+    dispatch(EditUser(newUser))
     navigate("/");
-    
+    alert("Form submitted");
+   } else {
+    alert("Form has errors.");
+    }
+
   }
 
    return (
     <div className="conatiner bg-secondary">
     <div className="my-5 w-50 m-auto ">
       <div className="text-center text-warning"> 
-             <h3> Edit-User -{id}</h3> 
+        <h3>
+           <GrEdit style={{ height:18 }}/> Edit-User -{id}
+        </h3> 
       </div>
 
       <form>
@@ -48,6 +121,7 @@ export default function Edit() {
             value={name}
             onChange={(e)=> setName(e.target.value)}
           />
+           <span style={{ color: "red" }}>{errors["name"]}</span>
         </div> 
         
         <div className="mb-3">
@@ -61,7 +135,8 @@ export default function Edit() {
             aria-describedby="emailHelp"
             value={email}
             onChange={(e)=> setEmail(e.target.value)}
-          />          
+          />        
+           <span style={{ color: "red" }}>{errors["email"]}</span>  
         </div>
 
         <div className="mb-3">
@@ -69,12 +144,13 @@ export default function Edit() {
             Number
           </label>
           <input
-            type="text"
+            type="tel"
             className="form-control"
             id="exampleInputNumber1"
             value={phone}
             onChange={(e)=> setPhone(e.target.value)}
           />
+           <span style={{ color: "red" }}>{errors["phone"]}</span>
         </div> 
 
         <button className='btn btn-success m-2' onClick={HandleValue}>

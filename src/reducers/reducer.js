@@ -13,13 +13,16 @@ const UserReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_USER:
       return {
-        users: [...state.users, action.payload],
+        users: [...state.users, action.payload]
       };
 
     case EDIT_USER:
+      const updatedUser = state.users.map((user) =>
+      user.id == action.payload.id ? action.payload : user);
+      console.log("editeduser",updatedUser);
       return {
-        ...state,
-        users: action.payload
+        adduser:action.payload,
+        users: updatedUser
         
       };
 
@@ -27,13 +30,13 @@ const UserReducer = (state = initialState, action) => {
       const delUser = state.users.filter(
         (user) => user.id != action.payload );
       return {
-        ...state,
          users:delUser
       };
 
       case VIEW_USER:
       return {
-        users: action.payload,
+        adduser: action.payload,
+        users: [...state.users]
         
       };
 

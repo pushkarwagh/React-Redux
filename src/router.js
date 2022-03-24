@@ -1,10 +1,10 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import App from "../App";
-import Form from "../Form"
-import Edit from "./editUser";
-import ViewUser from "./viewUser";
+import App from "./App";
+import Form from "./pages/Form"
+import Edit from "./pages/editUser";
+import ViewUser from "./pages/viewUser";
 
 const UserRouter = () => {
   return (

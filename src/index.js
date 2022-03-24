@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
+//import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 import 'bootstrap/dist/css/bootstrap.css' ;
 import { Provider } from "react-redux";
 import store from "./store";
-import UserRouter from "./pages/router";
+import UserRouter from "./router";
 
 store.subscribe(() => console.log(store.getState()));
 

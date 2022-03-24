@@ -22,6 +22,7 @@ const App = () => {
     }
     
     return ( 
+        
         <div>
             <button 
               className='btn btn-primary m-2' 
@@ -49,10 +50,10 @@ const App = () => {
                         users && users.map((user, i) => (
                             <tr key={i}>
                                 <td> 
-                                  <Link to={{
-                                       pathname:`/viewUser/${user.id}`                                        
-                                        }}
-                                        onClick={ () => handleView(user) }
+                                  <Link 
+                                    to={{ pathname:`/viewUser/${user.id}` }}
+                                    state={ user}   
+                                    onClick={ () => handleView(user) }
                                   >
                                    {user.name} 
                                   </Link>
@@ -64,12 +65,14 @@ const App = () => {
                                        state:{ data: user}
                                     }}
                                     >
-                                     <GrEdit className='m-2'
+                                     <GrEdit 
+                                       className='mx-2 '
                                        onClick={() => dispatch(EditUser(user)) }
                                      />
                                    </Link>
 
                                     <MdDelete 
+                                       className='mx-2 text-danger'
                                        onClick={ () => dispatch(DeleteUser(user.id)) }
                                      />
                                  </td>
