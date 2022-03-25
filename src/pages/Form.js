@@ -8,10 +8,8 @@ import { AddUser } from "../actions/actions";
 
 export default function Form() {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
-  let editUser = useSelector((state) => state.UserReducer);
-
+  
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -29,7 +27,7 @@ export default function Form() {
     if (typeof name !== "undefined") {
       if ( !name.match(/^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/) ) {
         formIsValid = false;
-        errors["name"] = "Only letters";
+        errors["name"] = "* format: full name(alex carry)";
       }
     }
 
@@ -40,18 +38,8 @@ export default function Form() {
     }
 
     if (typeof email !== "undefined") {
-      let lastAtPos = email.lastIndexOf("@");
-      let lastDotPos = email.lastIndexOf(".");
-
-      if (
-        !(
-          lastAtPos < lastDotPos &&
-          lastAtPos > 0 &&
-          email.indexOf("@@") == -1 &&
-          lastDotPos > 2 &&
-          email.length - lastDotPos > 2
-        )
-      ) {
+      const emailPattern = new RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g);
+      if (!emailPattern.test(email)) {
         formIsValid = false;
         errors["email"] = "Email is not valid";
       }
@@ -63,15 +51,15 @@ export default function Form() {
       errors["phone"] = "Cannot be empty";
     }
     if (typeof phone !== "undefined") {
-      var pattern = new RegExp(/^[0-9\b]+$/);
+      var pattern = new RegExp(/^\d{3}[\s.-]?\d{3}[\s.-]?\d{4}$/);
       if (!pattern.test(phone)) {
         formIsValid = false;
-        errors["phone"] = "Please enter only number.";
+        errors["phone"] = "enter valid phone number (10-digits)";
       } 
-      else if (phone.length != 10) {
-        formIsValid = false;
-        errors["phone"] = "Please enter valid phone number.";
-      }
+      // else if (phone.length != 10) {
+      //   formIsValid = false;
+      //   errors["phone"] = "phone number length should be exactly-10";
+      // }
     }
 
     setErrors(errors);
@@ -116,7 +104,7 @@ export default function Form() {
         <form>
           <div className="mb-3">
             <label htmlFor="exampleInputName1" className="form-label">
-              Name
+              Name [example: carry hill]
             </label>
             <input
               type="text"
